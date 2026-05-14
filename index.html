@@ -520,7 +520,57 @@
           font-size: 44px;
         }
       }
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 120px 25px 60px;
+          gap: 40px;
+        }
 
+        .hero-left {
+          order: 2;
+        }
+
+        .hero-right {
+          order: 1;
+        }
+
+        h1 {
+          font-size: 68px;
+          line-height: 0.95;
+        }
+
+        .hero p {
+          font-size: 18px;
+          max-width: 100%;
+        }
+
+        .hero-car {
+          width: 100%;
+          transform: none;
+          border-radius: 22px;
+        }
+
+        .brands {
+          gap: 25px;
+          font-size: 20px;
+          margin-top: 35px;
+        }
+
+        nav {
+          padding: 18px 25px;
+        }
+
+        .nav-links {
+          gap: 20px;
+          font-size: 14px;
+        }
+
+        .cta-btn {
+          padding: 12px 20px;
+          font-size: 14px;
+        }
+      }
       /* HE ELIMINADO LAS ÚLTIMAS LÍNEAS QUE TENÍAN !IMPORTANT PORQUE ERAN LAS QUE ROMPÍAN TU DISEÑO */
     </style>
   </head>
