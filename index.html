@@ -1,0 +1,664 @@
+<?php
+    require_once "config/conexion.php";
+?>
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ABNER MOTORS</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          Segoe UI,
+          sans-serif;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        background: #05070d;
+        color: white;
+        overflow-x: hidden;
+      }
+
+      /* NAVBAR */
+      .nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: 25px 70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(5, 7, 13, 0.45);
+        backdrop-filter: blur(15px);
+        transition: 0.35s;
+      }
+
+      .logo img {
+        height: 65px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        margin-left: 30px;
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      .nav-links a:hover {
+        opacity: 0.7;
+      }
+
+      .btn-nav {
+        padding: 12px 22px;
+        border-radius: 30px;
+        background: white;
+        color: #05070d !important;
+      }
+
+      .menu-toggle {
+        display: none;
+        font-size: 34px;
+        cursor: pointer;
+        z-index: 1001;
+      }
+
+      /* HERO - AJUSTADO PARA EVITAR SOLAPAMIENTO */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 48% 52%;
+        align-items: center;
+        padding: 120px 70px 60px; /* Aumentado padding superior e inferior */
+        background: #05070d;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 70% 40%,
+          rgba(255, 255, 255, 0.04),
+          transparent 40%
+        );
+      }
+
+      .hero-left {
+        position: relative;
+        z-index: 2;
+        padding-bottom: 100px; /* Espacio para que las marcas no toquen el botón */
+      }
+
+      .mini-text {
+        color: #9ca3af;
+        letter-spacing: 4px;
+        font-size: 14px;
+      }
+
+      /* CORRECCIÓN ORTOGRÁFICA: Recuerda cambiar en el HTML la "p" por "P" */
+      .hero h1 {
+        font-size: 82px;
+        line-height: 0.95; /* Ajustado para que no se peguen tanto las letras */
+        letter-spacing: -4px;
+        margin: 25px 0;
+        font-weight: 900;
+      }
+
+      .hero p {
+        color: #9ca3af;
+        font-size: 24px;
+        line-height: 1.7;
+        max-width: 650px;
+        margin-bottom: 45px;
+      }
+
+      .hero-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 18px 34px;
+        background: white;
+        color: black;
+        text-decoration: none;
+        border-radius: 40px;
+        font-weight: 700;
+        transition: 0.3s;
+      }
+
+      .hero-btn:hover {
+        transform: translateY(-5px);
+      }
+
+      .hero-right {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      /* IMAGEN CORREGIDA: Bordes uniformes y tamaño ajustado */
+      .hero-car {
+        width: 110%; /* Reducido de 125% para mejor encuadre */
+        transform: translateX(30px);
+        object-fit: cover;
+        filter: brightness(0.7) contrast(1.1);
+        border-radius: 30px; /* Bordes redondeados en todas las esquinas */
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      }
+
+      /* MARCAS POSICIONADAS CORRECTAMENTE */
+      .brands {
+        position: absolute;
+        left: 70px; /* Alineado con el padding del hero */
+        bottom: 40px; /* Bajado para que no sature el diseño */
+        display: flex;
+        gap: 50px;
+        color: #4b5563; /* Un gris un poco más elegante */
+        font-size: 24px;
+        flex-wrap: wrap;
+        z-index: 3;
+      }
+
+      /* SECTIONS */
+      .section {
+        padding: 120px 70px;
+      }
+
+      .section-title {
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+
+      .section-desc {
+        color: #94a3b8;
+        margin-bottom: 40px;
+      }
+
+      /* CARDS */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+      }
+
+      .car-card {
+        background: #0f172a;
+        border-radius: 30px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        transition: 0.3s;
+        transform-style: preserve-3d;
+        will-change: transform;
+      }
+
+      .car-card:hover {
+        transform: translateY(-10px);
+      }
+
+      .car-card img {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+      }
+
+      .car-info {
+        padding: 25px;
+      }
+
+      .car-info h3 {
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+
+      .car-info p {
+        color: #94a3b8;
+      }
+
+      .price {
+        margin-top: 18px;
+        font-size: 24px;
+        font-weight: 900;
+      }
+
+      /* SHOWCASE */
+      .showcase {
+        position: relative;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        overflow: hidden;
+        padding: 120px 30px;
+        background: #05070d;
+      }
+
+      .showcase-bg {
+        position: absolute;
+        font-size: 220px;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.03);
+        letter-spacing: 10px;
+        white-space: nowrap;
+        pointer-events: none;
+        transition: 0.1s linear;
+      }
+
+      .showcase-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+      }
+
+      .showcase-content h2 {
+        font-size: 90px;
+        line-height: 0.95;
+        letter-spacing: -4px;
+        margin: 25px 0;
+      }
+
+      .showcase-content p {
+        font-size: 22px;
+        color: #cbd5e1;
+        line-height: 1.7;
+        max-width: 700px;
+        margin: auto;
+      }
+
+      /* FULLSCREEN */
+      .fullscreen-car {
+        position: relative;
+        min-height: 120vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .fullscreen-image {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scale(1.08);
+        filter: brightness(0.55);
+      }
+
+      .fullscreen-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.2),
+          rgba(0, 0, 0, 0.75)
+        );
+      }
+
+      .fullscreen-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        max-width: 900px;
+        padding: 40px;
+      }
+
+      .fullscreen-content h2 {
+        font-size: 92px;
+        line-height: 0.9;
+        letter-spacing: -4px;
+        margin: 30px 0;
+      }
+
+      .fullscreen-content p {
+        font-size: 22px;
+        color: #e2e8f0;
+        line-height: 1.7;
+      }
+
+      /* REVEAL */
+      .reveal {
+        opacity: 0;
+        transform: translateY(80px);
+        transition: 1s all ease;
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* GLOW */
+      .glow {
+        position: fixed;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(37, 99, 235, 0.18) 0%,
+          rgba(37, 99, 235, 0.08) 30%,
+          transparent 70%
+        );
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+        filter: blur(40px);
+      }
+
+      /* CURSOR */
+      .cursor {
+        position: fixed;
+        width: 22px;
+        height: 22px;
+        border: 2px solid white;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 99999;
+        transition:
+          width 0.25s ease,
+          height 0.25s ease,
+          background 0.25s ease,
+          border 0.25s ease;
+      }
+
+      .cursor.active {
+        width: 70px;
+        height: 70px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
+
+      /* LOADER */
+      .loader {
+        position: fixed;
+        inset: 0;
+        background: #05070d;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition:
+          opacity 0.8s ease,
+          visibility 0.8s ease;
+      }
+
+      .loader h2 {
+        font-size: 42px;
+        letter-spacing: 4px;
+        margin-bottom: 25px;
+      }
+
+      .loader-line {
+        width: 260px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .loader-line span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: white;
+        animation: loading 1.8s ease forwards;
+      }
+
+      .loader.hide {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      @keyframes loading {
+        to {
+          width: 100%;
+        }
+      }
+
+      /* LENIS */
+      html.lenis,
+      html.lenis body {
+        height: auto;
+      }
+
+      .lenis.lenis-smooth {
+        scroll-behavior: auto !important;
+      }
+
+      .lenis.lenis-stopped {
+        overflow: hidden;
+      }
+
+      /* FOOTER */
+      .footer {
+        padding: 40px;
+        text-align: center;
+        color: #94a3b8;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 1100px) {
+        .hero {
+          grid-template-columns: 1fr;
+          padding-top: 150px;
+        }
+        .hero h1 {
+          font-size: 88px;
+          line-height: 0.95;
+        }
+        .hero-right {
+          margin-top: 40px;
+          justify-content: center;
+        }
+        .hero-car {
+          width: 100%;
+          transform: translateX(0);
+        }
+        .brands {
+          position: relative;
+          left: 0;
+          bottom: 0;
+          margin-top: 50px;
+          justify-content: center;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .menu-toggle {
+          display: block;
+        }
+        .nav-links {
+          position: fixed;
+          inset: 0;
+          background: rgba(5, 7, 13, 0.96);
+          backdrop-filter: blur(25px);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 35px;
+          transform: translateY(-100%);
+          transition: 0.5s ease;
+          z-index: 1000;
+        }
+        .nav-links.active {
+          transform: translateY(0);
+        }
+        .nav-links a {
+          margin-left: 0;
+          font-size: 28px;
+        }
+        .hero {
+          padding: 120px 30px 60px;
+        }
+        .hero h1 {
+          font-size: 58px;
+        }
+        .hero p {
+          font-size: 22px;
+        }
+        .section-title {
+          font-size: 44px;
+        }
+      }
+
+      /* HE ELIMINADO LAS ÚLTIMAS LÍNEAS QUE TENÍAN !IMPORTANT PORQUE ERAN LAS QUE ROMPÍAN TU DISEÑO */
+    </style>
+  </head>
+
+  <body>
+    <div class="loader" id="loader">
+      <h2>ABNER MOTORS</h2>
+      <div class="loader-line">
+        <span></span>
+      </div>
+    </div>
+    <div class="cursor"></div>
+    <div class="glow"></div>
+    <header class="nav">
+      <div class="logo">
+        <img src="assets/img/logo.png" alt="" />
+      </div>
+      <div class="menu-toggle" id="menuToggle">☰</div>
+      <div class="nav-links" id="navLinks">
+        <a href="#vehiculos">Vehículos</a>
+        <a href="auth/login.php">Entrar</a>
+        <a class="btn-nav" href="auth/registro.php"> Solicitar acceso </a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-left">
+        <span class="mini-text"> ABNER MOTORS </span>
+
+        <h1>Velocidad. precisión para clientes exigentes.</h1>
+
+        <p>
+          Creamos experiencias premium para clientes que buscan vehículos
+          exclusivos y atención privada.
+        </p>
+
+        <div class="brands">
+          <span>Porsche</span>
+          <span>Tesla</span>
+          <span>McLaren</span>
+          <span>BMW</span>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <img
+          class="hero-car"
+          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070&auto=format&fit=crop"
+        />
+      </div>
+    </section>
+
+    <section class="showcase">
+      <div class="showcase-bg">COLLECTION</div>
+
+      <div class="showcase-content">
+        <span class="tag"> 2026 Collection </span>
+
+        <h2>Diseño, velocidad y exclusividad.</h2>
+
+        <p>
+          Vehículos seleccionados para clientes que buscan una experiencia
+          premium y privada.
+        </p>
+      </div>
+    </section>
+    <section class="fullscreen-car">
+      <img
+        class="fullscreen-image"
+        src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2083&auto=format&fit=crop"
+      />
+
+      <div class="fullscreen-overlay"></div>
+
+      <div class="fullscreen-content">
+        <span class="tag"> Luxury Performance </span>
+
+        <h2>Ingeniería alemana. Presencia imponente.</h2>
+
+        <p>Vehículos premium seleccionados para una experiencia exclusiva.</p>
+      </div>
+    </section>
+    <section class="section reveal" id="vehiculos">
+      <h2 class="section-title">Vehículos destacados</h2>
+
+      <p class="section-desc">Vista previa del catálogo premium.</p>
+
+      <div class="cards">
+        <div class="car-card">
+          <img
+            src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=2070&auto=format&fit=crop"
+          />
+
+          <div class="car-info">
+            <h3>Chevrolet Camaro</h3>
+
+            <p>Diseño agresivo y presencia deportiva.</p>
+
+            <div class="price">Acceso privado</div>
+          </div>
+        </div>
+
+        <div class="car-card">
+          <img
+            src="https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=2069&auto=format&fit=crop"
+          />
+
+          <div class="car-info">
+            <h3>McLaren 720S</h3>
+
+            <p>Lujo, potencia y tecnología alemana.</p>
+
+            <div class="price">Acceso privado</div>
+          </div>
+        </div>
+
+        <div class="car-card">
+          <img
+            src="https://images.unsplash.com/photo-1494905998402-395d579af36f?q=80&w=2070&auto=format&fit=crop"
+          />
+
+          <div class="car-info">
+            <h3>Mustang GT</h3>
+
+            <p>Superdeportivo elegante y exclusivo.</p>
+
+            <div class="price">Acceso privado</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © 2026 ABNER MOTORS — Dealer privado de vehículos premium.
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  </body>
+</html>
